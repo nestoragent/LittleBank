@@ -36,28 +36,28 @@ public class BaseController {
 
     }
 
-    @RequestMapping(value = "/{save}", method = RequestMethod.GET)
-    public String welcomeName(@PathVariable String save,
-                              @RequestParam String timeStart,
-                              @RequestParam String timeEnd,
-                              ModelMap model) {
-
-        model.addAttribute("message", "Welcome " + save);
-        model.addAttribute("counter", ++counter);
-        logger.debug("[welcomeName] counter : {}", counter);
-        saveData(timeStart, timeEnd);
-        return VIEW_INDEX;
-
-    }
-
-    private void saveData(String timeStart, String timeEnd) {
-        BankAccount bankAccount = new BankAccount();
-        bankAccount.setTimeStart(timeStart);
-        bankAccount.setTimeEnd(timeEnd);
-        try {
-            Factory.getInstance().getSessionsDAO().addAccount(bankAccount);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//    @RequestMapping(value = "/{save}", method = RequestMethod.GET)
+//    public String welcomeName(@PathVariable String save,
+//                              @RequestParam String timeStart,
+//                              @RequestParam String timeEnd,
+//                              ModelMap model) {
+//
+//        model.addAttribute("message", "Welcome " + save);
+//        model.addAttribute("counter", ++counter);
+//        logger.debug("[welcomeName] counter : {}", counter);
+//        saveData(timeStart, timeEnd);
+//        return VIEW_INDEX;
+//
+//    }
+//
+//    private void saveData(String timeStart, String timeEnd) {
+//        BankAccount bankAccount = new BankAccount();
+//        bankAccount.setTimeStart(timeStart);
+//        bankAccount.setTimeEnd(timeEnd);
+//        try {
+//            Factory.getInstance().getSessionsDAO().addAccount(bankAccount);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

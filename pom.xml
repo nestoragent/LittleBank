@@ -1,12 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.vaa</groupId>
-    <artifactId>webservice-template</artifactId>
+    <groupId>com.littlebank</groupId>
+    <artifactId>littlebank-service</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>webservice-template</name>
-
+    <name>littlebank-service</name>
 
     <properties>
         <jdk.version>1.8</jdk.version>
@@ -96,9 +95,8 @@
     </dependencies>
 
 
-
     <build>
-        <finalName>SpringTestApp</finalName>
+        <finalName>littlebank</finalName>
         <plugins>
             <!-- Set JDK Compiler Level -->
             <plugin>
@@ -121,7 +119,7 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                    <path>/webservice</path>
+                    <path>/littlebank</path>
                 </configuration>
             </plugin>
 
