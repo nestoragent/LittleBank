@@ -21,17 +21,14 @@ import java.sql.SQLException;
 public class BaseController {
 
     private static final String VIEW_INDEX = "index";
-    private final static org.slf4j.Logger logger = LoggerFactory.getLogger(BaseController.class);
     private static int counter = 0;
 
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
     public String welcome(ModelMap model) {
         model.addAttribute("message", "Welcome");
         model.addAttribute("counter", ++counter);
-        logger.info("[welcome] counter : {}", counter);
         log.debug("[welcome] counter : {}", counter);
 
-        // Spring uses InternalResourceViewResolver and return back index.jsp
         return VIEW_INDEX;
 
     }

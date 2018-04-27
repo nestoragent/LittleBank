@@ -12,13 +12,13 @@ import java.time.LocalDateTime;
 public class Run {
 
     public static void main(String[] args) {
-        BankAccount bankAccount = new BankAccount();
-        bankAccount.setTimeStart(LocalDateTime.now().toString());
-        bankAccount.setTimeEnd(LocalDateTime.now().toString());
-        try {
-            Factory.getInstance().getSessionsDAO().addAccount(bankAccount);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        BankAccount bankAccount = new BankAccount();
+//        bankAccount.setTimeStart(LocalDateTime.now().toString());
+//        bankAccount.setTimeEnd(LocalDateTime.now().toString());
+//        try {
+//            Factory.getInstance().getSessionsDAO().addAccount(bankAccount);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
     }
 }
