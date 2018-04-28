@@ -14,7 +14,7 @@
         <property name="show_sql">true</property>
         <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
 
-        <mapping resource="Sessions.hbm.xml"/>
+        <mapping resource="BankAccount.hbm.xml"/>
 
     </session-factory>
 

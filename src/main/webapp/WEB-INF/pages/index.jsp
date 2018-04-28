@@ -21,7 +21,51 @@
 <%--<script type="text/babel" src="<c:url value='/assets/js/displayAll.js' />">--%>
 <script type="text/babel">
 
+    var Row = React.createClass({
+
+        getInitialState: function () {
+            return {
+                tempValue: this.props.value
+            }
+        },
+
+        componentWillReceiveProps: function (nextProps) {
+            //here u might want to check if u are currently editing but u get the idea -- maybe u want to reset it to the current prop on some cancelEdit method instead
+            this.setState({
+                tempValue: nextProps.value
+            });
+        },
+
+        render: function () {
+            return <div><input type="text" value={this.state.tempValue} onChange={this.onChange}/></div>;
+        },
+
+        onChange: function (e) {
+            this.setState({
+                tempValue: e.target.value
+            });
+        }
+    });
+
     var BankAccount = React.createClass({
+        handleUpdate() {
+            const self = this;
+            $.ajax({
+                url: "/littlebank/update?" +
+                "account_id=" + self.props.account.account_id +
+                "accountNumber=" + self.props.account.accountNumber +
+                "iban=" + self.props.account.iban +
+                "bankName=" + self.props.account.bankName +
+                "bic=" + self.props.account.bic,
+                type: 'POST',
+                success: function (result) {
+                    toastr.info('Added task to the Queue.');
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    toastr.error("Something went wrong.");
+                }
+            });
+        },
         handleDelete() {
             const self = this;
             $.ajax({
@@ -38,11 +82,14 @@
         render: function () {
             return (
                 <tr>
-                    <td>{this.props.account.account_id}</td>
-                    <td>{this.props.account.accountNumber}</td>
-                    <td>{this.props.account.iban}</td>
-                    <td>{this.props.account.bankName}</td>
-                    <td>{this.props.account.bic}</td>
+                    <td><Row value={this.props.account.account_id}/></td>
+                    <td><Row value={this.props.account.accountNumber}/></td>
+                    <td><Row value={this.props.account.iban}/></td>
+                    <td><Row value={this.props.account.bankName}/></td>
+                    <td><Row value={this.props.account.bic}/></td>
+                    <td>
+                        <button className="btn btn-info" onClick={this.handleUpdate}>Update</button>
+                    </td>
                     <td>
                         <button className="btn btn-info" onClick={this.handleDelete}>Delete</button>
                     </td>
@@ -66,6 +113,7 @@
                         <th>IBAN</th>
                         <th>bankName</th>
                         <th>bic</th>
+                        <th>Update</th>
                         <th>Delete</th>
                     </tr>
                     </thead>

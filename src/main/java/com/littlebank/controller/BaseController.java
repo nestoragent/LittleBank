@@ -1,6 +1,7 @@
 package com.littlebank.controller;
 
 import com.littlebank.logic.BankAccount;
+import com.littlebank.util.HibernateUtil;
 import com.littlebank.util.JsonHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -33,8 +34,27 @@ public class BaseController {
     }
 
     @RequestMapping(value = "/delete", method = {RequestMethod.DELETE})
-    public String welcome(@RequestParam String account_id) {
+    public String delete(@RequestParam String account_id) {
         log.info("req: ", account_id);
+        return VIEW_INDEX;
+    }
+
+    @RequestMapping(value = "/update", method = {RequestMethod.POST})
+    public String update(@RequestParam String account_id, @RequestParam String accountNumber, @RequestParam String IBAN,
+            @RequestParam String bankName, @RequestParam String bic) {
+        final BankAccount account = BankAccount.builder()
+                .account_id(Long.parseLong(account_id))
+                .accountNumber(Long.parseLong(accountNumber))
+                .IBAN(IBAN)
+                .bankName(bankName)
+                .bic(Long.parseLong(bic))
+                .build();
+        log.info("account_id: ", account_id);
+        log.info("accountNumber: ", accountNumber);
+        log.info("IBAN: ", IBAN);
+        log.info("bankName: ", bankName);
+        log.info("bic: ", bic);
+        log.info("account: ", account);
         return VIEW_INDEX;
     }
 }
