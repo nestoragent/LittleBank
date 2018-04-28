@@ -1,5 +1,6 @@
 package com.littlebank.logic;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 
@@ -7,7 +8,7 @@ import lombok.ToString;
  * Created by sbt-velichko-aa on 17.03.17.
  */
 @Data
-@ToString
+@AllArgsConstructor
 public class BankAccount {
 
     private Long account_id;

@@ -1,17 +1,16 @@
 package com.littlebank.controller;
 
 import com.littlebank.logic.BankAccount;
-import com.littlebank.util.Factory;
+import com.littlebank.util.JsonHelper;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by velichko-aa on 16.03.17.
@@ -21,40 +20,21 @@ import java.sql.SQLException;
 public class BaseController {
 
     private static final String VIEW_INDEX = "index";
-    private static int counter = 0;
 
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
     public String welcome(ModelMap model) {
-        model.addAttribute("message", "Welcome");
-        model.addAttribute("counter", ++counter);
-        log.debug("[welcome] counter : {}", counter);
-
+        BankAccount bankAccount1 = new BankAccount(10L, 0L, "asasdasdd", "asd", 123L);
+        BankAccount bankAccount2 = new BankAccount(12L, 2L, "as423423423d", "asd", 123213L);
+        final List<BankAccount> list = new ArrayList<>();
+        list.add(bankAccount1);
+        list.add(bankAccount2);
+        model.addAttribute("accounts", JsonHelper.convertAnObjectListToJsonArray(list));
         return VIEW_INDEX;
-
     }
 
-//    @RequestMapping(value = "/{save}", method = RequestMethod.GET)
-//    public String welcomeName(@PathVariable String save,
-//                              @RequestParam String timeStart,
-//                              @RequestParam String timeEnd,
-//                              ModelMap model) {
-//
-//        model.addAttribute("message", "Welcome " + save);
-//        model.addAttribute("counter", ++counter);
-//        logger.debug("[welcomeName] counter : {}", counter);
-//        saveData(timeStart, timeEnd);
-//        return VIEW_INDEX;
-//
-//    }
-//
-//    private void saveData(String timeStart, String timeEnd) {
-//        BankAccount bankAccount = new BankAccount();
-//        bankAccount.setTimeStart(timeStart);
-//        bankAccount.setTimeEnd(timeEnd);
-//        try {
-//            Factory.getInstance().getSessionsDAO().addAccount(bankAccount);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    @RequestMapping(value = "/delete", method = {RequestMethod.DELETE})
+    public String welcome(@RequestParam String account_id) {
+        log.info("req: ", account_id);
+        return VIEW_INDEX;
+    }
 }
