@@ -1,11 +1,10 @@
 package com.littlebank.DAO;
 
-import com.littlebank.logic.BankAccount;
+import com.littlebank.data.BankAccount;
 import com.littlebank.util.HibernateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

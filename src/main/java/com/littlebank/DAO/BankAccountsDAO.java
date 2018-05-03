@@ -1,6 +1,6 @@
 package com.littlebank.DAO;
 
-import com.littlebank.logic.BankAccount;
+import com.littlebank.data.BankAccount;
 
 import java.util.Collection;
 

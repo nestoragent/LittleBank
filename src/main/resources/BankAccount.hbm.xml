@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="com.littlebank.logic.BankAccount" table="sys.bankAccount">
+    <class name="com.littlebank.data.BankAccount" table="sys.bankAccount">
         <id column="account_id" name="account_id" type="java.lang.Long">
             <generator class="increment"/>
         </id>
