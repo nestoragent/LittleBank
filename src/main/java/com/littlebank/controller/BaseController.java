@@ -22,14 +22,29 @@ public class BaseController {
     private static final String VIEW_INDEX = "index.html";
 
     @RequestMapping(value = "/")
-    public String welcome(ModelMap model) {
+    public String welcome() {
         return VIEW_INDEX;
     }
 
+    @RequestMapping(value = "/delete")
+    public String delete(@RequestParam String accountNumber) {
+        System.out.println("reqs: " + accountNumber);
+        log.info("req: ", accountNumber);
+        return VIEW_INDEX;
+    }
 
-    @RequestMapping(value = "/delete", method = {RequestMethod.DELETE})
-    public String delete(@RequestParam String account_id) {
-        log.info("req: ", account_id);
+//    @RequestMapping(value = "/create", method = {RequestMethod.POST})
+    @RequestMapping(value = "/create")
+    public String create(@RequestParam String accountNumber, @RequestParam String IBAN,
+                         @RequestParam String bankName, @RequestParam String bic) {
+        final BankAccount account = BankAccount.builder()
+                .accountNumber(Long.parseLong(accountNumber))
+                .IBAN(IBAN)
+                .bankName(bankName)
+                .bic(Long.parseLong(bic))
+                .build();
+        System.out.println("res: " + account.toString());
+        log.info("account: ", account.toString());
         return VIEW_INDEX;
     }
 
@@ -37,18 +52,12 @@ public class BaseController {
     public String update(@RequestParam String accountNumber, @RequestParam String IBAN,
             @RequestParam String bankName, @RequestParam String bic) {
         final BankAccount account = BankAccount.builder()
-//                .account_id(Long.parseLong(account_id))
                 .accountNumber(Long.parseLong(accountNumber))
                 .IBAN(IBAN)
                 .bankName(bankName)
                 .bic(Long.parseLong(bic))
                 .build();
         System.out.println("res: " + account.toString());
-//        log.info("account_id: ", account_id);
-//        log.info("accountNumber: ", accountNumber);
-//        log.info("IBAN: ", IBAN);
-//        log.info("bankName: ", bankName);
-//        log.info("bic: ", bic);
         log.info("account: ", account.toString());
         return VIEW_INDEX;
     }

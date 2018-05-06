@@ -1,51 +1,11 @@
 'use strict';
 
-// // tag::vars[]
-// const React = require('react');
-// const ReactDOM = require('react-dom');
-// // end::vars[]
-
-class Row extends React.Component {
-
-    constructor(props) {
-        super();
-        this.state = {
-            tempValue: props.value
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        //here u might want to check if u are currently editing but u get the idea -- maybe u want to reset it to the current prop on some cancelEdit method instead
-        // this.setState({
-        //     tempValue: nextProps.value
-        // });
-        this.state = {
-            tempValue: nextProps.value
-        };
-        toastr.info('Set value: ' + nextProps.value);
-    }
-
-    onChange(e) {
-        toastr.info('Set212 value: ' + e.target.value);
-        this.setState({
-            tempValue: e.target.value
-        });
-    }
-
-    render() {
-        return <div><input type="text" value={this.state.tempValue} onChange={this.onChange}/></div>;
-    }
-
-
-}
-
 var BankAccount = React.createClass({
     handleUpdate() {
         const self = this;
         $.ajax({
             url: "/littlebank/update?" +
-            "&account_id=" + self.props.account.account_id +
-            "&accountNumber=" + self.props.account.accountNumber +
+            "accountNumber=" + self.props.account.accountNumber +
             "&IBAN=" + self.props.account.iban +
             "&bankName=" + self.props.account.bankName +
             "&bic=" + self.props.account.bic,
@@ -53,31 +13,32 @@ var BankAccount = React.createClass({
             success: function (result) {
                 toastr.info('Added task to the Queue.');
             },
-            error: function (xhr, ajaxOptions, thrownError) {
-                toastr.error("Something went wrong.");
+            error: function (response, status, result) {
+                toastr.options.timeOut = 0;
+                toastr.error(result + " (Code: " + response.status + ")", "Error while updating!");
             }
         });
     },
     handleDelete() {
         const self = this;
         $.ajax({
-            url: "/littlebank/delete?account_id=" + self.props.account.account_id,
-            type: 'DELETE',
+            url: "/delete?accountNumber=" + self.props.account.accountNumber,
             success: function (result) {
                 toastr.info('Added task to the Queue.');
             },
-            error: function (xhr, ajaxOptions, thrownError) {
-                toastr.error("Something went wrong.");
+            error: function (response, status, result) {
+                toastr.options.timeOut = 0;
+                toastr.error(result + " (Code: " + response.status + ")", "Error while deleting!");
             }
         });
     },
     render: function () {
         return (
             <tr>
-                <td><Row value={this.props.account.accountNumber}/></td>
-                <td><Row value={this.props.account.iban}/></td>
-                <td><Row value={this.props.account.bankName}/></td>
-                <td><Row value={this.props.account.bic}/></td>
+                <td>{this.props.account.accountNumber}</td>
+                <td>{this.props.account.iban}</td>
+                <td>{this.props.account.bankName}</td>
+                <td>{this.props.account.bic}</td>
                 <td>
                     <button className="btn btn-info" onClick={this.handleUpdate}>Update</button>
                 </td>
@@ -93,7 +54,7 @@ var BankAccountTable = React.createClass({
     render: function () {
         var rows = [];
         this.props.accounts.forEach(function (account) {
-            rows.push(<BankAccount account={account} key={account.account_id}/>);
+            rows.push(<BankAccount account={account} key={account.accountNumber}/>);
         });
         return (
             <table className="table table-striped">
@@ -121,11 +82,28 @@ class App extends React.Component {
         }).then(function (data) {
             self.setState({accounts: data._embedded.bankAccounts});
         });
-    };
+    }
 
     constructor() {
         super();
         this.state = {accounts: []};
+    }
+
+    createAccount(newAccount){
+        $.ajax({
+            url: "/create?accountNumber=" + newAccount.accountNumber +
+            "&IBAN=" + newAccount.IBAN +
+            "&bankName=" + newAccount.bankName +
+            "&bic=" + newAccount.bic,
+            type: 'POST',
+            success: function (result) {
+                toastr.info('Added task to the Queue.');
+            },
+            error: function (response, status, result) {
+                toastr.options.timeOut = 0;
+                toastr.error(result + " (Code: " + response.status + ")", "Error while updating!");
+            }
+        });
     }
 
     componentDidMount() {
@@ -133,9 +111,83 @@ class App extends React.Component {
     }
 
     render() {
-        return (<BankAccountTable accounts={this.state.accounts}/>);
+        return (
+            <div>
+                <CreateDialog/>
+                <BankAccountTable accounts={this.state.accounts}/>
+            </div>
+        );
     }
 }
+
+// tag::create-dialog[]
+class CreateDialog extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            accountNumber: "",
+            IBAN: "",
+            bankName: "",
+            bic: ""
+        };
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+
+        this.setState({
+            [name]: value
+        });
+    }
+
+    handleSubmit(event) {
+        var stateNew = event.state;
+        var newEmployee = {
+            accountNumber: stateNew.accountNumber,
+            IBAN: stateNew.IBAN,
+            bankName: stateNew.bankName,
+            bic: stateNew.bic
+        };
+        this.props.createAccount(newEmployee);
+        //// Navigate away from the dialog to hide it.
+        //window.location = "#";
+    }
+
+    render() {
+        return (
+            <div>
+                <a href="#createAccount">Create</a>
+
+                <div id="createAccount" className="modalDialog">
+                    <div>
+                        <a href="#" title="Close" className="close">X</a>
+
+                        <h2>Create new bank account</h2>
+
+                        <form>
+                            <input type="text" name="accountNumber" placeholder="Account number" className="field"
+                                   value={this.state.accountNumber} onChange={this.handleInputChange}/>
+                            <input type="text" name="IBAN" placeholder="IBAN" className="field" value={this.state.IBAN}
+                                   onChange={this.handleInputChange}/>
+                            <input type="text" name="bankName" placeholder="Bank name" className="field"
+                                   value={this.state.bankName} onChange={this.handleInputChange}/>
+                            <input type="text" name="bic" placeholder="BIC" className="field" value={this.state.bic}
+                                   onChange={this.handleInputChange}/>
+                            <button onClick={this.handleSubmit}>Create</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+}
+// end::create-dialog[]
 
 ReactDOM.render(
     <App/>, document.getElementById('root')
