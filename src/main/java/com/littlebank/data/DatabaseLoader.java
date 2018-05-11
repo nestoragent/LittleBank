@@ -17,7 +17,7 @@ public class DatabaseLoader implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-        this.repository.save(new BankAccount(10L, 0L, "asasdasdd", "asd", 123L));
-        this.repository.save(new BankAccount(12L, 2L, "as423423423d", "asd", 123213L));
+        this.repository.save(new BankAccount(0L, "asasdasdd", "asd", 123L));
+        this.repository.save(new BankAccount(2L, "as423423423d", "asd", 123213L));
     }
 }
